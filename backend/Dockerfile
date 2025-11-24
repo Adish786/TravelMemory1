@@ -1,22 +1,23 @@
-# Stage 1: build
+# Stage 1: Build
 FROM node:18 AS builder
 
 WORKDIR /usr/src/app
-COPY backend/package*.json ./
+
+# Copy only package.json first (better for caching)
+COPY package*.json ./
+
 RUN npm install
-COPY backend/. .
 
-# (Optional) If you have build / transpile step
-# RUN npm run build
+# Now copy rest of the source code
+COPY . .
 
-# Stage 2: production image
+# Stage 2: Production
 FROM node:18-alpine
 
 WORKDIR /usr/src/app
+
 COPY --from=builder /usr/src/app ./
 
-# Only expose the port your app uses
 EXPOSE 3001
 
-# Use env var or default
 CMD ["node", "index.js"]
