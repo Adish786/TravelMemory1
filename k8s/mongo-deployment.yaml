@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongo
+  namespace: travel-memory
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongo
+  template:
+    metadata:
+      labels:
+        app: mongo
+    spec:
+      containers:
+      - name: mongo
+        image: mongo:5.0   # or whichever version
+        ports:
+        - containerPort: 27017
+
+        env:
+        - name: MONGO_INITDB_ROOT_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: travel-memory-secret
+              key: MONGO_INITDB_ROOT_USERNAME
+
+        - name: MONGO_INITDB_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: travel-memory-secret
+              key: MONGO_INITDB_ROOT_PASSWORD
+
+        volumeMounts:
+        - name: mongo-data
+          mountPath: /data/db
+
+        resources:
+          requests:
+            cpu: "150m"
+            memory: "256Mi"
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
+
+      volumes:
+      - name: mongo-data
+        emptyDir: {}   # for dev; for prod use PersistentVolumeClaim

@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: travel-memory-config
+  namespace: travel-memory
+data:
+  REACT_APP_BACKEND_URL: "http://backend.travel-memory.svc.cluster.local:5000"
+  # Add other config values if needed
