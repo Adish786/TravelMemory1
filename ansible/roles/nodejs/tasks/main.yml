@@ -1,0 +1,19 @@
+- name: Install Node.js
+  apt:
+    name: nodejs
+    state: present
+    update_cache: yes
+
+- name: Install npm
+  apt:
+    name: npm
+    state: present
+
+- name: Clone MERN repo
+  git:
+    repo: https://github.com/UnpredictablePrashant/TravelMemory.git
+    dest: /opt/travelmemory
+
+- name: Install dependencies
+  npm:
+    path: /opt/travelmemory
