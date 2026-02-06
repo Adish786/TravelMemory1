@@ -2,6 +2,15 @@ resource "aws_security_group" "adish-web_sg" {
   vpc_id = aws_vpc.adish-mern_vpc.id
 
   ingress {
+    description = "SSH from EC2 Instance Connect"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["18.206.107.24/29"] # EC2 Instance Connect IP range for eu-west-2
+  }
+
+  ingress {
+    description = "SSH from my IP"
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"

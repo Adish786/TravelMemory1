@@ -6,7 +6,7 @@ resource "tls_private_key" "mern_key" {
 
 # Create AWS key pair
 resource "aws_key_pair" "mern_keypair" {
-  key_name   = "MERNAppDeployment"
+  key_name   = var.key_name
   public_key = tls_private_key.mern_key.public_key_openssh
 }
 
@@ -14,5 +14,5 @@ resource "aws_key_pair" "mern_keypair" {
 resource "local_file" "private_key" {
   filename        = "${path.module}/MERNAppDeployment.pem"
   content         = tls_private_key.mern_key.private_key_pem
-  file_permission = "0600"
+  file_permission = "700"
 }

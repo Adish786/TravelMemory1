@@ -148,3 +148,5 @@ terraform.rc
 .env.local
 .env.development.local
 .env.test.local
+*.venv/  
+.MERNAppDeployment.pem
