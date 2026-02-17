@@ -6,8 +6,16 @@ resource "aws_security_group" "adish-web_sg" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
+  //  cidr_blocks = ["0.0.0.0/0"]
     cidr_blocks = ["18.206.107.24/29"] # EC2 Instance Connect IP range for eu-west-2
   }
+ingress {
+  description = "Temporary SSH"
+  from_port   = 22
+  to_port     = 22
+  protocol    = "tcp"
+  cidr_blocks = ["0.0.0.0/0"]
+}
 
   ingress {
     description = "SSH from my IP"
@@ -35,10 +43,26 @@ resource "aws_security_group" "adish-web_sg" {
 resource "aws_security_group" "adish-db_sg" {
   vpc_id = aws_vpc.adish-mern_vpc.id
 
+  # Allow MongoDB from Web
   ingress {
     from_port       = 27017
     to_port         = 27017
     protocol        = "tcp"
     security_groups = [aws_security_group.adish-web_sg.id]
+  }
+
+  # Allow SSH from Web
+  ingress {
+    from_port       = 22
+    to_port         = 22
+    protocol        = "tcp"
+    security_groups = [aws_security_group.adish-web_sg.id]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 }

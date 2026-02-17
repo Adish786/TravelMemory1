@@ -150,3 +150,5 @@ terraform.rc
 .env.test.local
 *.venv/  
 .MERNAppDeployment.pem
+/node_modules
+.github/

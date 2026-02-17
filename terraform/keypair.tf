@@ -12,7 +12,7 @@ resource "aws_key_pair" "mern_keypair" {
 
 # Save private key to local file
 resource "local_file" "private_key" {
-  filename        = "${path.module}/MERNAppDeployment.pem"
+  filename        = "${path.module}/MERNAppAdishKeyPair.pem"
   content         = tls_private_key.mern_key.private_key_pem
-  file_permission = "700"
+  file_permission = "0400"
 }

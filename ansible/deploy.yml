@@ -1,0 +1,45 @@
+- name: Deploy MERN App
+  hosts: web
+  become: yes
+
+  vars:
+    app_dir: /home/ubuntu/mern/TravelMemory
+
+  tasks:
+
+    - name: Ensure Git is installed
+      apt:
+        name: git
+        state: present
+        update_cache: yes
+
+    - name: Clone or update repository
+      git:
+        repo: https://github.com/Adish786/TravelMemory.git
+        dest: "{{ app_dir }}"
+        version: main
+        force: yes
+
+    - name: Install backend dependencies
+      npm:
+        path: "{{ app_dir }}/backend"
+
+    - name: Install frontend dependencies
+      npm:
+        path: "{{ app_dir }}/frontend"
+
+    - name: Build frontend
+      command: npm run build
+      args:
+        chdir: "{{ app_dir }}/frontend"
+
+    - name: Stop existing PM2 process if running
+      shell: pm2 delete travelmemory || true
+
+    - name: Start backend with PM2
+      command: pm2 start server.js --name travelmemory
+      args:
+        chdir: "{{ app_dir }}/backend"
+
+    - name: Save PM2 process list
+      command: pm2 save
