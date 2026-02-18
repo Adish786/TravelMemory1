@@ -152,3 +152,10 @@ terraform.rc
 .MERNAppDeployment.pem
 /node_modules
 .github/
+# dependencies
+node_modules/
+
+# build
+dist/
+build/
+.next/
