@@ -12,6 +12,7 @@ resource "aws_instance" "adish_web" {
   }
 }
 
+
 resource "aws_instance" "adish_db" {
   ami                  = var.ami_id
   instance_type        = var.instance_type
